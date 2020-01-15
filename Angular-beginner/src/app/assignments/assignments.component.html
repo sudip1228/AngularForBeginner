@@ -1,0 +1,72 @@
+<p>{{title}}</p> <!--referencing to "title" of src\app\assignments\assignments.component.ts -->
+    
+<!--learning attribute directive and also learning structural directives:if,else,for.The below ngstyle attribute shows color red when assignmnet is not submitted and shows green when assignment is submitted. "?" is called ternery operator -->
+<!--
+<div *ngFor="let array of assignments"
+[ngStyle]="{'color': array.submitted==false ? 'red':'green'}" 
+
+> -->
+
+<!--using class attribute.it is alternative way.The above code shows use of style attribute  -->
+<!--<div *ngFor="let array of assignments"
+[ngClass]="{'submitted': array.submitted==true, 
+'unsubmitted': array.submitted==false}"
+>  -->
+
+
+<form ngForm #assignmentsForm class="form"> <!--"#" means giving name to the form-->
+
+    <mat-form-field>
+
+        <input matInput #assignmentName [(ngModel)]="name" name="AnyString">
+
+
+    </mat-form-field>
+    <!--following is two-way binding-->
+    <mat-form-field>
+
+        <input matInput [matDatepicker]="picker"
+         [(ngModel)]="duedate"
+         name="anything"
+         placeholder="when is your assignment due?"
+        />
+
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> <!--toggle the calender-->
+         <mat-datepicker #picker></mat-datepicker> 
+    </mat-form-field>  <!--two way binding ends here-->
+
+    <button mat-stroked-button
+    [disabled]="!enabled" 
+    (click)="onSubmit() ; assignmentsForm.reset()"
+    color="primary">Add assignments</button>   <!--using property, event and both binding in angular.here we are accesing assignment.component.ts and using its "enabled"property-->
+    <!--[(ngModel)].this is used to do two way binding(both event and property binding)-->
+    </form> <!--assignmentsForm.reset().it clears the form value -->
+
+    <p>{{name}}</p>
+    <p>{{duedate}}</p>
+
+<mat-list *ngFor="let array of assignments">
+
+<h3 mat-subheader>{{array.duedate}}</h3>
+<!--[ngStyle]="{'color': 'green'}"  you can use this doe to display green on div-->
+
+<!--here "appsubmitted" selectors is received from \shared\submitted.directive.ts which gives you green color for text andit is known as custom attribute directive-->
+   
+<mat-list-item>
+<p appSubmitted *ngIf="array.submitted; else unsubmitted">Assignment {{array.name}} has been submitted. </p> 
+   
+        <ng-template #unsubmitted>
+            Assignment {{array.name}} has not been submitted  
+
+        </ng-template> 
+        
+        <mat-divider></mat-divider>
+
+    </mat-list-item>
+</mat-list>    <!--using for-loop to access array.here "array" is a variable-->
+
+<app-assignment-detail> </app-assignment-detail> <!--use child selectors in parent component files to call child-->
+
+
+
+
